@@ -20,6 +20,7 @@ class EyeStrip {
     CRGB _primaryColor;
     HotSpot _hotSpot;
     int _position = 0;
+    int _numPositions;
 
   public:
     void next(int velocity); // velocity in bulbs per frame * 256

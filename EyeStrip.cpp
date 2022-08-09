@@ -4,12 +4,14 @@ EyeStrip::EyeStrip(CRGB* buffer, int bufferLength, CRGB primaryColor, HotSpot ho
   _buffer(buffer), 
   _bufferLength(bufferLength), 
   _primaryColor(primaryColor), 
-  _hotSpot(hotSpot) {};
+  _hotSpot(hotSpot) {
+    _numPositions = _bufferLength * 256;
+  };
 
 void EyeStrip::next(int velocity) {
   writeBase();
   writeHotSpot();
-  _position += velocity;
+  _position = (_position + velocity + _numPositions) % _numPositions;
 }
 
 void EyeStrip::writeBase() {
