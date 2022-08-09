@@ -10,7 +10,7 @@
 
 #define EYE_FACE_DATA 44
 #define EYE_FACE_CLOCK 42
-#define EYE_FACE_STRIP_LENGTH 56
+#define EYE_FACE_STRIP_LENGTH 12341234
 
 #define MYSTIC_BODY_DATA 40
 #define MYSTIC_BODY_CLOCK 38
@@ -22,7 +22,7 @@
 
 #define OUTER_EYE_BODY_DATA 32
 #define OUTER_EYE_BODY_CLOCK 30
-#define OUTER_EYE_STRIP_LENGTH 
+#define OUTER_EYE_STRIP_LENGTH 56
 
 #define INNER_EYE_BODY_DATA 28
 #define INNER_EYE_BODY_CLOCK 26
@@ -34,10 +34,16 @@
 #define BRIGHTNESS  255
 #define FRAMES_PER_SECOND 30
 
+CRGB leds[OUTER_EYE_STRIP_LENGTH];
+HotSpot hotSpot = { 3, CRGBPalette16(CRGB::Yellow, CRGB::Red) };
+EyeStrip eyeStrip = EyeStrip(leds, OUTER_EYE_STRIP_LENGTH, CRGB::Yellow, hotSpot);
+
 void setup() {
-    // FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
+  FastLED.addLeds<CHIPSET, INNER_EYE_BODY_DATA, INNER_EYE_BODY_CLOCK, COLOR_ORDER>(leds, OUTER_EYE_STRIP_LENGTH).setCorrection( TypicalLEDStrip );
 }
 
 void loop() {
-
+  EVERY_N_MILLISECONDS(33) {
+    eyeStrip.next(32);
+  }
 }

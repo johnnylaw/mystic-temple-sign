@@ -2,7 +2,7 @@
 
 typedef struct HotSpot {
   int width;
-  CRGB color;
+  CRGBPalette16 palette;
 } HotSpot;
 
 class EyeStrip {
@@ -11,12 +11,20 @@ class EyeStrip {
       CRGB* buffer, 
       int bufferLength, 
       CRGB primaryColor, 
-      HotSpot* hotSpots
+      HotSpot hotSpot
     );
   
   private:
     CRGB* _buffer;
     int _bufferLength;
     CRGB _primaryColor;
-    HotSpot* _hotSpots;
+    HotSpot _hotSpot;
+    int _position = 0;
+
+  public:
+    void next(int velocity); // velocity in bulbs per frame * 256
+
+  private:
+    void writeBase();
+    void writeHotSpot();
 };
