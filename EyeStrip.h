@@ -28,4 +28,5 @@ class EyeStrip {
   private:
     void writeBase();
     void writeHotSpot();
+    int distance(int position, int bulb);
 };

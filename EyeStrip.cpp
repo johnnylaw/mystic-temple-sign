@@ -27,8 +27,13 @@ void EyeStrip::writeHotSpot() {
   int hotPoint = _position + dissipationDistance;
 
   for (int i = firstBulb; i < firstBulb + _hotSpot.width; i++) {
-    int distance = min(abs(i * 256 - hotPoint) * 2 / _hotSpot.width, 255);
+    int distanceFromHotSpot = distance(hotPoint, i);
+    int fractionalDistance = min(distanceFromHotSpot * 2 / _hotSpot.width, 255);
     bulb = i % _bufferLength;
-    _buffer[i] = ColorFromPalette(_hotSpot.palette, 255 - distance);
+    _buffer[bulb] = ColorFromPalette(_hotSpot.palette, 255 - fractionalDistance);
   }
+}
+
+int EyeStrip::distance(int position, int bulb) {
+  return abs(bulb * 256 - position);
 }

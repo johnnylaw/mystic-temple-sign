@@ -1,4 +1,5 @@
 #include "EyeStrip.h"
+#include "RandomVelocity.h"
 
 #define MYSTIC_FACE_DATA 52
 #define MYTSIC_FACE_CLOCK 50
@@ -35,15 +36,16 @@
 #define FRAMES_PER_SECOND 30
 
 CRGB leds[OUTER_EYE_STRIP_LENGTH];
-HotSpot hotSpot = { 3, CRGBPalette16(CRGB::Yellow, CRGB::Red) };
+HotSpot hotSpot = { 7, CRGBPalette16(CRGB::Yellow, CRGB::Red) };
 EyeStrip eyeStrip = EyeStrip(leds, OUTER_EYE_STRIP_LENGTH, CRGB::Yellow, hotSpot);
 
 void setup() {
-  FastLED.addLeds<CHIPSET, INNER_EYE_BODY_DATA, INNER_EYE_BODY_CLOCK, COLOR_ORDER>(leds, OUTER_EYE_STRIP_LENGTH).setCorrection( TypicalLEDStrip );
+  FastLED.addLeds<CHIPSET, OUTER_EYE_BODY_DATA, OUTER_EYE_BODY_CLOCK, COLOR_ORDER>(leds, OUTER_EYE_STRIP_LENGTH).setCorrection( TypicalLEDStrip );
 }
 
 void loop() {
   EVERY_N_MILLISECONDS(33) {
-    eyeStrip.next(32);
+    eyeStrip.next(16);
+    FastLED.show();
   }
 }
