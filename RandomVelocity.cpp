@@ -11,8 +11,12 @@ RandomVelocity::RandomVelocity(
   _aveMag(averageMagnitude),
   _varMag(varianceMagnitude) {};
 
-
 int RandomVelocity::next() {
+#ifdef DEBUG_RAND_VELOC
+  Serial.print("currentCycle: "); Serial.println(_currentCycle);
+  _velocity.print();
+  Serial.println("");
+#endif
   if (++_currentCycle >= _velocity.lifetime) {
     mintNew();
     reset();
@@ -21,9 +25,14 @@ int RandomVelocity::next() {
 }
 
 void RandomVelocity::mintNew() {
-  int velocity = random16(0, 2 * _varMag) - _varMag + _aveMag;
-  int lifetime = random16(0, 2 * _varCycles) - _varCycles + _aveCycles;
-  int sign = random8(0, 1) * 2 - 1;
+  int velocity = max(random16(0, 2 * _varMag) - _varMag + _aveMag, 1);
+  int lifetime = max(random16(0, 2 * _varCycles) - _varCycles + _aveCycles, 5);
+  int rand = random8(2);
+  int sign = rand * 2 - 1;
+#ifdef DEBUG_RAND_VELOC
+  Serial.print("rand: "); Serial.println(rand);
+  Serial.println("");
+#endif
   _velocity = { .value = velocity * sign, .lifetime = lifetime };
 }
 

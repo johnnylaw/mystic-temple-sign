@@ -1,6 +1,10 @@
 #include "EyeStrip.h"
 #include "RandomVelocity.h"
 
+// #ifndef DEBUG
+// #define DEBUG
+// #endif
+
 #define MYSTIC_FACE_DATA 52
 #define MYTSIC_FACE_CLOCK 50
 #define MYSTIC_FACE_STRIP_LENGTH 12341324
@@ -36,16 +40,56 @@
 #define FRAMES_PER_SECOND 30
 
 CRGB leds[OUTER_EYE_STRIP_LENGTH];
-HotSpot hotSpot = { 7, CRGBPalette16(CRGB::Yellow, CRGB::Red) };
-EyeStrip eyeStrip = EyeStrip(leds, OUTER_EYE_STRIP_LENGTH, CRGB::Yellow, hotSpot);
+CRGB baseColorEye = CRGB(60, 40, 0);
+CRGB hotColorEye = CRGB(255, 0, 0);
+CRGBPalette16 eyePalette = CRGBPalette16(baseColorEye, hotColorEye);
+HotSpot hotSpot = { 10, eyePalette };
+EyeStrip eyeStrip = EyeStrip(leds, OUTER_EYE_STRIP_LENGTH, baseColorEye, hotSpot);
+RandomVelocity velocity = { 40, 35, 30, 40 }; // ave cycle, var cycle, ave velocity, var velocity
+
+#ifdef DEBUG
+#define MANUAL_ADVANCE_PIN 20
+uint8_t lastManualPinValue = HIGH;
+#endif
 
 void setup() {
+  Serial.begin(57600);
+#ifdef DEBUG
+  pinMode(MANUAL_ADVANCE_PIN, INPUT_PULLUP);
+  Serial.begin(57600);
+  Serial.print("Color at 0:   "); printColor(ColorFromPalette(eyePalette, 0));
+  Serial.print("Color at 128: "); printColor(ColorFromPalette(eyePalette, 128));
+  Serial.print("Color at 225: "); printColor(ColorFromPalette(eyePalette, 225));
+  Serial.print("Color at 240: "); printColor(ColorFromPalette(eyePalette, 240));
+  Serial.print("Color at 245: "); printColor(ColorFromPalette(eyePalette, 245));
+  Serial.print("Color at 255: "); printColor(ColorFromPalette(eyePalette, 255));
+#endif
   FastLED.addLeds<CHIPSET, OUTER_EYE_BODY_DATA, OUTER_EYE_BODY_CLOCK, COLOR_ORDER>(leds, OUTER_EYE_STRIP_LENGTH).setCorrection( TypicalLEDStrip );
 }
 
+#ifdef DEBUG
+void printColor(CRGB color) {
+  Serial.print("  R: ");
+  Serial.print(color.red);
+  Serial.print("  ,G: ");
+  Serial.print(color.green);
+  Serial.print("  B: ");
+  Serial.println(color.blue);
+}
+#endif
+
 void loop() {
-  EVERY_N_MILLISECONDS(33) {
+#ifdef DEBUG
+  int manualPinValue = digitalRead(MANUAL_ADVANCE_PIN);
+  if (lastManualPinValue != manualPinValue) {
     eyeStrip.next(16);
     FastLED.show();
+    lastManualPinValue = manualPinValue;
   }
+#else
+  EVERY_N_MILLISECONDS(33) {
+    eyeStrip.next(velocity.next());
+    FastLED.show();
+  }
+#endif
 }

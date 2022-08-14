@@ -1,8 +1,17 @@
 #include <FastLED.h>
 
+#ifndef DEBUG_RAND_VELOC
+#define DEBUG_RAND_VELOC
+#endif
+
 typedef struct Velocity {
   int value;
   int lifetime;
+#ifdef DEBUG_RAND_VELOC
+  void print() {
+    Serial.print("value: "); Serial.print(value); Serial.print(", lifetime: "); Serial.println(lifetime);
+  };
+#endif
 } Velocity;
 
 class RandomVelocity {
