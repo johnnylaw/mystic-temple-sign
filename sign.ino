@@ -50,9 +50,12 @@ CRGB leds[INNER_EYE_BODY_START + INNER_EYE_BODY_LENGTH];
 CRGB baseColorEye = CRGB(60, 40, 0);
 CRGB hotColorEye = CRGB(255, 0, 0);
 CRGBPalette16 eyePalette = CRGBPalette16(baseColorEye, hotColorEye);
-HotSpot hotSpot = { 10, eyePalette };
-EyeStrip eyeStrip = EyeStrip(leds + OUTER_EYE_BODY_START, OUTER_EYE_BODY_LENGTH, baseColorEye, hotSpot);
-RandomVelocity velocity = { 40, 35, 30, 40 }; // ave cycle, var cycle, ave velocity, var velocity
+HotSpot hotSpotOuter = { 10, eyePalette };
+HotSpot hotSpotInner = { 5, eyePalette };
+EyeStrip eyeStripOuter = EyeStrip(leds + OUTER_EYE_BODY_START, OUTER_EYE_BODY_LENGTH, baseColorEye, hotSpotOuter);
+EyeStrip eyeStripInner = EyeStrip(leds + INNER_EYE_BODY_START, INNER_EYE_BODY_LENGTH, baseColorEye, hotSpotInner);
+RandomVelocity velocityOuterEye = { 40, 35, 30, 40 }; // ave cycle, var cycle, ave velocity, var velocity
+RandomVelocity velocityInnerEye = { 40, 35, 15, 20 }; // ave cycle, var cycle, ave velocity, var velocity
 
 #ifdef DEBUG
 #define MANUAL_ADVANCE_PIN 20
@@ -96,13 +99,14 @@ void loop() {
 #ifdef DEBUG
   int manualPinValue = digitalRead(MANUAL_ADVANCE_PIN);
   if (lastManualPinValue != manualPinValue) {
-    eyeStrip.next(16);
+    eyeStripOuter.next(16);
     FastLED.show();
     lastManualPinValue = manualPinValue;
   }
 #else
   EVERY_N_MILLISECONDS(33) {
-    eyeStrip.next(velocity.next());
+    eyeStripOuter.next(velocityOuterEye.next());
+    eyeStripInner.next(velocityInnerEye.next());
     FastLED.show();
   }
 #endif
