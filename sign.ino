@@ -105,6 +105,15 @@ void loop() {
   }
 #else
   EVERY_N_MILLISECONDS(33) {
+    for (int i = 0; i < EYE_FACE_START + EYE_FACE_LENGTH; i++) {
+      leds[i] = CRGB(10, 10, 20);
+    }
+    for (int i = MYSTIC_BODY_START; i < MYSTIC_BODY_START + MYSTIC_BODY_LENGTH; i++) {
+      leds[i] = CRGB(20, 0, 0);
+    }
+    for (int i = TEMPLE_BODY_START; i < TEMPLE_BODY_START + TEMPLE_BODY_LENGTH; i++) {
+      leds[i] = CRGB(0, 0, 20);
+    }
     eyeStripOuter.next(velocityOuterEye.next());
     eyeStripInner.next(velocityInnerEye.next());
     FastLED.show();
