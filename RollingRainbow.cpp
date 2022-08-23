@@ -13,9 +13,9 @@ void RollingRainbow::next() {
 
   for (int stripInd = 0; stripInd < _numStrips; stripInd++) {
     strip = _strips[stripInd];
-    for (int bulbInd = 0; bulbInd < strip.numPositions; bulbInd++) {
-      bulbPosition = strip.positions[bulbInd];
-      strip.buffer[bulbInd] = getHue(_baseHue + (bulbPosition - _baseHue) * _hueSpread);
+    for (int bulbInd = 0; bulbInd < strip.length; bulbInd++) {
+      bulbPosition = strip.positionAtIndex(bulbInd);
+      strip.writeBuffer(bulbInd, getHue(_baseHue + (bulbPosition - _baseHue) * _hueSpread));
     }
   }
 

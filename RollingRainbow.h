@@ -1,14 +1,9 @@
 #include "HueWheel.h"
 #include <FastLED.h>
+#include "CartesianStrip.h"
 
 #ifndef ROLLING_RAINBOW
 #define ROLLING_RAINBOW
-
-typedef struct CartesianStrip {
-  int positions[];
-  int numPositions;
-  CRGB buffer[];
-} CartesianStrip;
 
 class RollingRainbow {
   public: 

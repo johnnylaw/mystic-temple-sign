@@ -4,6 +4,13 @@
     "chrono": "cpp",
     "limits": "cpp",
     "random": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "any": "cpp",
+    "bitset": "cpp",
+    "future": "cpp",
+    "memory": "cpp",
+    "optional": "cpp",
+    "*.ipp": "cpp",
+    "*.tcc": "cpp"
   }
 }
